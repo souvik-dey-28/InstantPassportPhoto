@@ -46,7 +46,7 @@ A web-based tool to generate print-ready passport photo sheets from uploaded ima
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/passport-photo-pro.git
+git clone https://github.com/deepakguptabca/InstantPhotos.git
 cd passport-photo-pro
 ```
 
