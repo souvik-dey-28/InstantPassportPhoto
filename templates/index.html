@@ -169,91 +169,92 @@
   </div>
 
   <!-- ══ TAB: LINKEDIN FRAME ══ -->
-  <div id="tab-linkedin" class="tab-panel card hidden">
-    <h1 class="section-title" data-i18n="li_title">💼 LinkedIn Profile Frame Generator</h1>
-    <p class="section-hint" data-i18n="li_hint">Customize your LinkedIn profile picture with a banner or frame in just a few clicks.</p>
+  <div id="tab-linkedin" class="tab-panel hidden" style="max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 1rem; align-items: center; border: none; box-shadow: none; background: transparent; padding-top: 1rem;">
+    
+    <div style="text-align: center;">
+      <h1 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;" data-i18n="li_title">LinkedIn <span style="color: var(--accent);">Profile Picture Frame Generator</span></h1>
+      <p style="color: var(--text-muted); font-size: 0.9rem;" data-i18n="li_hint">Customize your LinkedIn profile picture with a badge or frame in just a few clicks.</p>
+    </div>
 
-    <div class="li-layout">
-      <!-- LEFT: Canvas Preview -->
-      <div class="canvas-wrap">
-        <canvas id="liCanvas" width="600" height="600" title="Click to upload photo"></canvas>
-        <p style="font-size:0.75rem;color:var(--text-muted)" data-i18n="li_click_hint">Click canvas or use the uploader →</p>
-        <button id="downloadBtn" class="btn-primary" style="width:100%" data-i18n="li_download">⬇️ Download Image</button>
+    <!-- Canvas Preview wrapper matching the visual style -->
+    <div style="width: 100%; border: 1px solid var(--border); border-radius: 12px; background: var(--bg-card); padding: 1.5rem; display: flex; flex-direction: column; align-items: center; gap: 1.5rem; box-shadow: var(--shadow);">
+      
+      <!-- Canvas Preview -->
+      <div style="position: relative; display: flex; justify-content: center;">
+        <canvas id="liCanvas" width="800" height="800" style="width: 250px; height: 250px; border-radius: 50%; box-shadow: 0 4px 14px rgba(0,0,0,0.2)"></canvas>
       </div>
 
-      <!-- RIGHT: Controls -->
-      <div>
-        <!-- Upload -->
-        <div class="section-block" style="margin-top:0">
-          <label class="block-label" data-i18n="li_upload_title">📁 Upload Photo</label>
-          <div class="li-drop-zone" id="liDropZone">
-            <input type="file" id="liFileInput" accept="image/*"/>
-            <div class="drop-icon">🖼️</div>
-            <p style="font-size:0.85rem;font-weight:600;" data-i18n="upload_hint">Drag & Drop or click to upload</p>
-          </div>
-          <button id="liRemoveBgBtn" class="btn-secondary" style="width:100%; margin-top:0.5rem" data-i18n="li_remove_bg">✨ Remove Background (AI)</button>
-        </div>
+      <!-- Upload Button -->
+      <input type="file" id="liFileInput" accept="image/*" class="hidden"/>
+      <button id="liUploadBtnTrigger" style="width: 100%; padding: 0.8rem; background: rgba(124, 58, 237, 0.1); color: #7c3aed; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; text-align: center; font-size: 0.95rem; transition: background 0.2s;" data-i18n="li_upload_title">
+        Upload Image
+      </button>
 
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-          <!-- Banner Color -->
-          <div class="section-block">
-            <label class="block-label" data-i18n="li_banner_color">🎨 Banner Color (Hex)</label>
-            <div class="swatch-row" id="ringSwatches">
-              <div class="li-swatch active" data-color="#4b9429" style="background:#4b9429" title="Green"></div>
-              <div class="li-swatch" data-color="#0077B5" style="background:#0077B5" title="LinkedIn Blue"></div>
-              <div class="li-swatch" data-color="#f59e0b" style="background:#f59e0b" title="Gold"></div>
-              <label class="li-swatch" style="display:flex;align-items:center;justify-content:center;background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);cursor:pointer;" title="Custom">
-                <input type="color" id="ringColorPicker" value="#4b9429" style="opacity:0;position:absolute;width:0;height:0"/>
-              </label>
-            </div>
-            <input type="text" id="ringColorHex" class="form-input" style="margin-top:0.5rem" value="#4b9429" readonly/>
-          </div>
-
-          <!-- Text Color -->
-          <div class="section-block">
-            <label class="block-label" data-i18n="li_text_color">🖊️ Text Color (Hex)</label>
-            <div class="swatch-row" id="arcTextSwatches">
-              <div class="li-swatch active" data-color="#ffffff" style="background:#fff;border:1px solid #555" title="White"></div>
-              <div class="li-swatch" data-color="#000000" style="background:#000" title="Black"></div>
-              <label class="li-swatch" style="display:flex;align-items:center;justify-content:center;background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);cursor:pointer;" title="Custom">
-                <input type="color" id="arcTextColorPicker" value="#ffffff" style="opacity:0;position:absolute;width:0;height:0"/>
-              </label>
-            </div>
-            <input type="text" id="arcTextHex" class="form-input" style="margin-top:0.5rem" value="#FFFFFF" readonly/>
+      <div style="width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <!-- Arc Color -->
+        <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+          <label style="font-size: 0.85rem; color: var(--text); font-weight: 500;" data-i18n="li_banner_color">Arc Color</label>
+          <div style="position: relative; display: flex; align-items: center;">
+            <input type="color" id="ringColorPicker" value="#4b9429" style="position: absolute; left: 8px; width: 22px; height: 22px; border: none; border-radius: 50%; cursor: pointer; padding: 0; background: none;" />
+            <input type="text" id="ringColorHex" value="#4B9429" style="width: 100%; padding: 0.6rem 0.6rem 0.6rem 2.4rem; border: 1px solid var(--border); border-radius: 8px; outline: none; color: var(--text); font-size: 0.9rem; background: var(--bg-input);" readonly />
           </div>
         </div>
-
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-          <!-- BG Color (behind person) -->
-          <div class="section-block">
-            <label class="block-label" data-i18n="li_bg_pattern">🖼️ Background Pattern</label>
-            <div class="swatch-row" id="bgSwatches">
-              <div class="li-swatch active" data-color="transparent" style="background:repeating-conic-gradient(#eee 0% 25%, transparent 0% 50%) 50% / 10px 10px" title="Transparent"></div>
-              <div class="li-swatch" data-color="#ffffff" style="background:#fff;border:1px solid #555" title="White"></div>
-              <div class="li-swatch" data-color="#e2e8f0" style="background:#e2e8f0" title="Light Slate"></div>
-              <label class="li-swatch" style="display:flex;align-items:center;justify-content:center;background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);cursor:pointer;" title="Custom">
-                <input type="color" id="bgColorPicker" value="#ffffff" style="opacity:0;position:absolute;width:0;height:0"/>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <!-- Arc Text -->
-        <div class="section-block">
-          <label class="block-label" data-i18n="li_banner_text">✍️ Banner Text</label>
-          <input type="text" id="arcText" class="form-input" data-i18n-placeholder="li_banner_text_placeholder" placeholder="#CashNee" value="#CashNee" style="margin-bottom:0.5rem;text-align:center;font-weight:700"/>
-        </div>
-
-        <!-- Crop tools -->
-        <div class="section-block">
-          <label class="block-label" data-i18n="li_adjust_photo">✂️ Adjust Photo</label>
-          <div class="crop-toolbar">
-            <button class="crop-tool-btn" id="cropOpen"><span data-i18n="crop">✂️ Open Crop</span></button>
-            <button class="crop-tool-btn" id="rotateCWBtn">🔄 CW</button>
-            <button class="crop-tool-btn" id="flipHBtn">↔️ Flip H</button>
+        <!-- Text Color -->
+        <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+          <label style="font-size: 0.85rem; color: var(--text); font-weight: 500;" data-i18n="li_text_color">Text Color</label>
+          <div style="position: relative; display: flex; align-items: center;">
+            <input type="color" id="arcTextColorPicker" value="#ffffff" style="position: absolute; left: 8px; width: 22px; height: 22px; border: none; border-radius: 50%; cursor: pointer; padding: 0; background: none;" />
+            <input type="text" id="arcTextHex" value="#FFFFFF" style="width: 100%; padding: 0.6rem 0.6rem 0.6rem 2.4rem; border: 1px solid var(--border); border-radius: 8px; outline: none; color: var(--text); font-size: 0.9rem; background: var(--bg-input);" readonly />
           </div>
         </div>
       </div>
+
+      <!-- Arc Text -->
+      <div style="width: 100%; display: flex; flex-direction: column; gap: 0.4rem;">
+        <label style="font-size: 0.85rem; color: var(--text); font-weight: 500;" data-i18n="li_banner_text">Arc Text</label>
+        <input type="text" id="arcText" placeholder="text here" value="text here" data-i18n-placeholder="li_banner_text_placeholder" style="width: 100%; padding: 0.7rem; border: 1px solid var(--border); border-radius: 8px; outline: none; color: var(--text); font-size: 0.9rem; background: var(--bg-input);" />
+      </div>
+
+      <!-- Background Swatches Requested -->
+      <div style="width: 100%; padding-top: 0.5rem; display: flex; flex-direction: column; gap: 0.4rem;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <label style="font-size: 0.85rem; color: var(--text); font-weight: 500;" data-i18n="bg_colour">Background Colour</label>
+          <button id="liRemoveBgBtn" style="padding: 0.3rem 0.7rem; background: rgba(59, 130, 246, 0.1); color: var(--accent); font-weight: 600; border: none; border-radius: 6px; cursor: pointer; font-size: 0.75rem;" data-i18n="li_remove_bg">✨ AI Remove BG</button>
+        </div>
+        <div class="colour-grid" id="liBgColourGrid">
+          <button class="colour-swatch active" data-colour="white" style="background:#fff" title="White"></button>
+          <button class="colour-swatch" data-colour="transparent" style="background:repeating-conic-gradient(#ccc 0% 25%, #fff 0% 50%) 50% / 8px 8px;" title="Original/Transparent"></button>
+          <button class="colour-swatch" data-colour="#dc2626" style="background:#dc2626" title="Red"></button>
+          <button class="colour-swatch" data-colour="#2563eb" style="background:#2563eb" title="Blue"></button>
+          <button class="colour-swatch" data-colour="#eab308" style="background:#eab308" title="Yellow"></button>
+          <button class="colour-swatch" data-colour="#16a34a" style="background:#16a34a" title="Green"></button>
+          <button class="colour-swatch" data-colour="#ea580c" style="background:#ea580c" title="Orange"></button>
+          <button class="colour-swatch" data-colour="#ec4899" style="background:#ec4899" title="Pink"></button>
+          <button class="colour-swatch" data-colour="#6d28d9" style="background:#6d28d9" title="Dark Violet"></button>
+          <button class="colour-swatch" data-colour="#000" style="background:#000" title="Black"></button>
+          <label class="colour-swatch colour-wheel-btn" title="Custom colour">
+            🎨<input type="color" id="liBgColorPicker" value="#ffffff" style="opacity:0;position:absolute;width:0;height:0"/>
+          </label>
+        </div>
+      </div>
+
+      <div style="width: 100%; border-top: 1px solid var(--border); padding-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <label style="display:flex; align-items:center; gap: 0.5rem; cursor: pointer; font-size: 0.85rem; color: var(--text); font-weight: 500;">
+          <input type="checkbox" id="archTextToggle" style="width: 16px; height: 16px; accent-color: #7c3aed;" checked />
+          <span>Use Arch Text Style</span>
+        </label>
+        
+        <div style="display:flex; align-items:center; gap:0.5rem">
+          <label style="font-size: 0.8rem; color: var(--text-muted); cursor:pointer;">Top Logo (Optional)</label>
+          <input type="file" id="liLogoInput" accept="image/*" style="max-width:140px; font-size: 0.75rem;" />
+        </div>
+      </div>
+
+      <!-- Download -->
+      <button id="liDownloadBtn" style="width: 100%; padding: 0.9rem; background: #7c3aed; color: #ffffff; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; text-align: center; font-size: 1rem; transition: background 0.2s;" data-i18n="li_download">
+        Download Image
+      </button>
+
     </div>
   </div>
 
@@ -304,5 +305,6 @@
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 <script src="/static/app.js"></script>
+<script src="/static/linkedin.js"></script>
 </body>
 </html>

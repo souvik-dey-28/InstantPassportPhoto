@@ -8,11 +8,12 @@
     "li_download": "⬇️ Download Image",
     "li_upload_title": "📁 Upload Photo",
     "li_remove_bg": "✨ Remove Background (AI)",
-    "li_banner_color": "🎨 Banner Color (Hex)",
-    "li_text_color": "🖊️ Text Color (Hex)",
+    "li_branding_title": "Branding & Style",
+    "li_banner_color": "🎨 Banner Color",
+    "li_text_color": "🖊️ Text Color",
     "li_bg_pattern": "🖼️ Background Pattern",
     "li_banner_text": "✍️ Banner Text",
-    "li_banner_text_placeholder": "#CashNee",
+    "li_banner_text_placeholder": "PLACE TEXT HERE",
     "li_adjust_photo": "✂️ Adjust Photo",
     "rotate_cw": "Rotate CW",
     "rotate_ccw": "Rotate CCW",
@@ -149,8 +150,9 @@
     "li_banner_color": "🎨 बैनर रंग (हेक्स)",
     "li_text_color": "🖊️ टेक्स्ट रंग (हेक्स)",
     "li_bg_pattern": "🖼️ पृष्ठभूमि पैटर्न",
+    "li_branding_title": "ब्रांडिंग और स्टाइल",
     "li_banner_text": "✍️ बैनर टेक्स्ट",
-    "li_banner_text_placeholder": "#CashNee",
+    "li_banner_text_placeholder": "PLACE TEXT HERE",
     "li_adjust_photo": "✂️ फोटो समायोजित करें"
   },
   "bn": {
@@ -221,8 +223,9 @@
     "li_banner_color": "🎨 ব্যানার রঙ (হেক্স)",
     "li_text_color": "🖊️ টেক্সট রঙ (হেক্স)",
     "li_bg_pattern": "🖼️ পটভূমি প্যাটার্ন",
+    "li_branding_title": "ব্র্যান্ডিং এবং স্টাইল",
     "li_banner_text": "✍️ ব্যানার টেক্সট",
-    "li_banner_text_placeholder": "#CashNee",
+    "li_banner_text_placeholder": "PLACE TEXT HERE",
     "li_adjust_photo": "✂️ ছবি সামঞ্জস্য করুন"
   },
   "ta": {
@@ -294,7 +297,7 @@
     "li_text_color": "🖊️ உரை நிறம் (ஹெக்ஸ்)",
     "li_bg_pattern": "🖼️ பின்னணி முறை",
     "li_banner_text": "✍️ பேனர் உரை",
-    "li_banner_text_placeholder": "#CashNee",
+    "li_banner_text_placeholder": "PLACE TEXT HERE",
     "li_adjust_photo": "✂️ புகைப்படத்தை சரிசெய்யவும்"
   },
   "gu": {
@@ -366,7 +369,7 @@
     "li_text_color": "🖊️ Text Color (Hex)",
     "li_bg_pattern": "🖼️ Background Pattern",
     "li_banner_text": "✍️ Banner Text",
-    "li_banner_text_placeholder": "#CashNee",
+    "li_banner_text_placeholder": "PLACE TEXT HERE",
     "li_adjust_photo": "✂️ Adjust Photo"
   },
   "fr": {
@@ -438,7 +441,7 @@
     "li_text_color": "🖊️ Couleur du texte",
     "li_bg_pattern": "🖼️ Motif de fond",
     "li_banner_text": "✍️ Texte de la bannière",
-    "li_banner_text_placeholder": "#CashNee",
+    "li_banner_text_placeholder": "PLACE TEXT HERE",
     "li_adjust_photo": "✂️ Ajuster la photo"
   },
   "de": {
@@ -510,7 +513,7 @@
     "li_text_color": "🖊️ Textfarbe",
     "li_bg_pattern": "🖼️ Hintergrundmuster",
     "li_banner_text": "✍️ Bannertext",
-    "li_banner_text_placeholder": "#CashNee",
+    "li_banner_text_placeholder": "PLACE TEXT HERE",
     "li_adjust_photo": "✂️ Foto anpassen"
   },
   "ja": {
@@ -582,7 +585,7 @@
     "li_text_color": "🖊️ テキストの色",
     "li_bg_pattern": "🖼️ 背景パターン",
     "li_banner_text": "✍️ バナーテキスト",
-    "li_banner_text_placeholder": "#CashNee",
+    "li_banner_text_placeholder": "PLACE TEXT HERE",
     "li_adjust_photo": "✂️ 写真を調整"
   },
   "ko": {
@@ -654,7 +657,7 @@
     "li_text_color": "🖊️ 텍스트 색상",
     "li_bg_pattern": "🖼️ 배경 패턴",
     "li_banner_text": "✍️ 배너 텍스트",
-    "li_banner_text_placeholder": "#CashNee",
+    "li_banner_text_placeholder": "PLACE TEXT HERE",
     "li_adjust_photo": "✂️ 사진 조정"
   },
   "it": {
@@ -726,7 +729,7 @@
     "li_text_color": "🖊️ Colore del testo",
     "li_bg_pattern": "🖼️ Motivo di sfondo",
     "li_banner_text": "✍️ Testo del banner",
-    "li_banner_text_placeholder": "#CashNee",
+    "li_banner_text_placeholder": "PLACE TEXT HERE",
     "li_adjust_photo": "✂️ Regola foto"
   },
   "es": {
@@ -797,7 +800,7 @@
     "li_text_color": "🖊️ Color del texto",
     "li_bg_pattern": "🖼️ Patrón de fondo",
     "li_banner_text": "✍️ Texto del banner",
-    "li_banner_text_placeholder": "#CashNee",
+    "li_banner_text_placeholder": "PLACE TEXT HERE",
     "li_adjust_photo": "✂️ Ajustar foto"
   },
   "zh": {
@@ -868,7 +871,7 @@
     "li_text_color": "🖊️ 文字颜色",
     "li_bg_pattern": "🖼️ 背景图案",
     "li_banner_text": "✍️ 横幅文字",
-    "li_banner_text_placeholder": "#CashNee",
+    "li_banner_text_placeholder": "PLACE TEXT HERE",
     "li_adjust_photo": "✂️ 调整照片"
   },
   "pt": {
@@ -939,7 +942,7 @@
     "li_text_color": "🖊️ Cor do texto",
     "li_bg_pattern": "🖼️ Padrão de fundo",
     "li_banner_text": "✍️ Texto do banner",
-    "li_banner_text_placeholder": "#CashNee",
+    "li_banner_text_placeholder": "PLACE TEXT HERE",
     "li_adjust_photo": "✂️ Ajustar foto"
   },
   "ru": {
@@ -1010,7 +1013,7 @@
     "li_text_color": "🖊️ Цвет текста",
     "li_bg_pattern": "🖼️ Узор фона",
     "li_banner_text": "✍️ Текст баннера",
-    "li_banner_text_placeholder": "#CashNee",
+    "li_banner_text_placeholder": "PLACE TEXT HERE",
     "li_adjust_photo": "✂️ Настроить фото"
   },
   "ur": {
@@ -1081,7 +1084,7 @@
     "li_text_color": "🖊️ متن کا رنگ",
     "li_bg_pattern": "🖼️ پس منظر کا پیٹرن",
     "li_banner_text": "✍️ بینر کا متن",
-    "li_banner_text_placeholder": "#CashNee",
+    "li_banner_text_placeholder": "PLACE TEXT HERE",
     "li_adjust_photo": "✂️ تصویر کو ایڈجسٹ کریں"
   },
   "ar": {
@@ -1152,7 +1155,7 @@
     "li_text_color": "🖊️ لون النص",
     "li_bg_pattern": "🖼️ نمط الخلفية",
     "li_banner_text": "✍️ نص اللافتة",
-    "li_banner_text_placeholder": "#CashNee",
+    "li_banner_text_placeholder": "PLACE TEXT HERE",
     "li_adjust_photo": "✂️ ضبط الصورة"
   }
 }

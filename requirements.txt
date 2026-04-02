@@ -18,3 +18,4 @@ pillow
 rembg
 onnxruntime
 werkzeug
+flask
