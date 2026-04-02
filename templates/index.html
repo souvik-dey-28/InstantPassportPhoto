@@ -1,455 +1,308 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="icon" href="https://res.cloudinary.com/dcajb02df/image/upload/v1753960691/logo_pyncju.png" type="image/png">
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PassPort Photo Pro</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet"/>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
-  <style>
-    body { font-family: 'Inter', sans-serif; }
-    #particles-js {
-      position: fixed; width: 100%; height: 100%;
-      background-color: #1a202c; z-index: -1;
-    }
-    .transition-all { transition: all 0.3s ease-in-out; }
-    .glow-shadow { box-shadow: 0 0 15px rgba(59,130,246,0.5), 0 0 5px rgba(59,130,246,0.3); }
-    .photo-card { transition: all 0.3s ease; }
-    .photo-card:hover { transform: translateY(-2px); }
-    .cropper-modal-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.85);
-      z-index: 100; display: flex; align-items: center; justify-content: center;
-    }
-    .cropper-modal-box {
-      background: #1f2937; border: 1px solid #374151; border-radius: 1rem;
-      padding: 1.5rem; max-width: 520px; width: 95%; max-height: 90vh; overflow: auto;
-    }
-  </style>
+  <title>InstantPhotos — Free Passport Photo Generator</title>
+  <meta name="description" content="Free passport photo generator with background removal, colour picker, AI prompt generator and multilingual support. No API keys needed."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css"/>
+  <link rel="stylesheet" href="/static/style.css"/>
 </head>
-<body class="bg-gray-900 text-white" oncontextmenu="return false">
+<body>
 
-  <div id="particles-js"></div>
+<!-- ░░ PARTICLES BACKGROUND ░░ -->
+<div id="particles-js"></div>
 
-  <!-- Header -->
-  <header class="bg-gray-900/50 backdrop-blur-sm border-b border-gray-700 sticky top-0 z-10">
-    <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16">
-        <span class="text-2xl font-bold text-blue-400">Passport Photo Pro</span>
-      </div>
-    </nav>
-  </header>
-
-  <!-- Beta Banner -->
-  <div class="bg-yellow-500 text-black py-2 px-4 font-medium text-center text-sm sm:text-base shadow-md">
-    <marquee behavior="scroll" direction="left" scrollamount="5">
-      🚧 This site is currently in beta. If you encounter any issues, please use the feedback form below to report them. Thank you!
-    </marquee>
-  </div>
-
-  <!-- Main -->
-  <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <div class="relative bg-gray-800/60 backdrop-blur-md border border-gray-700 rounded-2xl shadow-2xl p-8 max-w-3xl mx-auto">
-
-      <h2 class="text-2xl font-bold text-center mb-2">Upload Photos</h2>
-      <p class="text-gray-400 text-center text-sm mb-6">Add one or more photos. Set how many copies of each you need.</p>
-
-      <!-- Drop Zone -->
-      <div id="dropZone" class="border-2 border-dashed border-gray-600 hover:border-blue-400 bg-gray-900/50 rounded-xl p-8 cursor-pointer transition-all text-center">
-        <input type="file" id="imageInput" class="hidden" accept="image/*" multiple />
-        <div class="flex flex-col items-center">
-          <svg class="w-14 h-14 text-gray-500 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-4-4V7a4 4 0 014-4h10a4 4 0 014 4v5a4 4 0 01-4 4h-2m-6 4h6m-3-4v4"/>
-          </svg>
-          <p class="text-lg font-semibold">Drag & Drop or Click to Upload</p>
-          <p class="text-sm text-gray-400 mt-1">Multiple photos supported • JPG, PNG, WEBP</p>
-        </div>
-      </div>
-
-      <!-- Photo Cards List -->
-      <div id="photoList" class="mt-6 space-y-3"></div>
-
-      <!-- Add More Button (shown after first upload) -->
-      <div id="addMoreWrapper" class="hidden mt-3 text-center">
-        <button id="addMoreBtn" class="text-blue-400 hover:text-blue-300 text-sm border border-blue-400/40 rounded-lg px-4 py-2 transition-all hover:bg-blue-400/10">
-          + Add More Photos
-        </button>
-      </div>
-
-      <!-- Advanced Options -->
-      <div class="mt-8 space-y-4">
-        <div class="text-center">
-          <button id="toggleAdvanced" class="text-blue-400 hover:text-blue-300 transition-all text-sm">Advanced Options</button>
-        </div>
-        <div id="advancedOptions" class="hidden bg-gray-900/50 p-6 rounded-lg border border-gray-700">
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left">
-            <div>
-              <label class="block mb-1 text-sm font-medium">Width (px)</label>
-              <input type="number" id="width" value="390" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-            </div>
-            <div>
-              <label class="block mb-1 text-sm font-medium">Height (px)</label>
-              <input type="number" id="height" value="480" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-            </div>
-            <div>
-              <label class="block mb-1 text-sm font-medium">Spacing (px)</label>
-              <input type="number" id="spacing" value="10" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-            </div>
-            <div>
-              <label class="block mb-1 text-sm font-medium">Border (px)</label>
-              <input type="number" id="border" value="2" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-            </div>
-          </div>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-          <button id="generateBtn" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition-all transform hover:scale-105 glow-shadow disabled:opacity-50 disabled:cursor-not-allowed">
-            Generate Sheet
-          </button>
-          <button id="downloadBtn" class="w-full sm:w-auto bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-lg transition-all transform hover:scale-105 hidden">
-            Download PDF
-          </button>
-        </div>
-        <div id="loading" class="hidden text-blue-400 font-semibold text-center">Processing images... please wait</div>
-      </div>
-
-      <!-- PDF Preview -->
-      <embed id="pdfPreview" type="application/pdf" class="w-full h-[500px] mt-6 hidden rounded-lg"/>
+<!-- ░░ HEADER ░░ -->
+<header class="app-header">
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-icon">📸</span>
+      <span class="logo-text" data-i18n="app_name">InstantPhotos</span>
     </div>
-  </main>
-
-  <!-- Cropper Modal -->
-  <div id="cropperModal" class="cropper-modal-overlay hidden">
-    <div class="cropper-modal-box">
-      <h3 class="text-lg font-bold mb-3">Crop Photo</h3>
-      <div class="max-h-[400px] overflow-hidden rounded-lg">
-        <img id="cropModalImage" src="" style="max-width:100%; display:block;"/>
+    <div class="header-controls">
+      <!-- Language Selector -->
+      <div class="control-group">
+        <label class="control-label" data-i18n="language">Language</label>
+        <select id="langSelect" class="control-select">
+          <option value="en">🇬🇧 English</option>
+          <option value="hi">🇮🇳 हिन्दी</option>
+          <option value="bn">🇧🇩 বাংলা</option>
+          <option value="ta">🇮🇳 தமிழ்</option>
+          <option value="gu">🇮🇳 ગુજરાતી</option>
+          <option value="fr">🇫🇷 Français</option>
+          <option value="de">🇩🇪 Deutsch</option>
+          <option value="ja">🇯🇵 日本語</option>
+          <option value="ko">🇰🇷 한국어</option>
+          <option value="it">🇮🇹 Italiano</option>
+          <option value="es">🇪🇸 Español</option>
+          <option value="zh">🇨🇳 中文</option>
+          <option value="pt">🇧🇷 Português</option>
+          <option value="ru">🇷🇺 Русский</option>
+          <option value="ur">🇵🇰 اردو</option>
+          <option value="ar">🇸🇦 العربية</option>
+        </select>
       </div>
-      <div class="flex gap-3 mt-4 justify-end">
-        <button id="cancelCropBtn" class="bg-gray-600 hover:bg-gray-500 text-white py-2 px-5 rounded-lg transition-all">Cancel</button>
-        <button id="confirmCropBtn" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-5 rounded-lg transition-all">Crop & Save</button>
+      <!-- Theme Selector -->
+      <div class="control-group">
+        <label class="control-label" data-i18n="theme">Theme</label>
+        <select id="themeSelect" class="control-select">
+          <option value="dark">🌑 Dark</option>
+          <option value="light">☀️ Light</option>
+          <option value="system">💻 System</option>
+          <option value="red">🔴 Red</option>
+          <option value="blue">🔵 Blue</option>
+          <option value="yellow">🟡 Yellow</option>
+          <option value="green">🟢 Green</option>
+          <option value="orange">🟠 Orange</option>
+          <option value="pink">🌸 Pink</option>
+          <option value="violet">🔮 Violet</option>
+          <option value="black">⬛ Black</option>
+        </select>
       </div>
     </div>
   </div>
+</header>
 
-  <!-- Feedback Button -->
-  <button id="feedbackBtn" class="fixed bottom-5 right-5 bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-5 rounded-full shadow-lg transition-all transform hover:rotate-12">
-    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
-    </svg>
-  </button>
+<!-- ░░ BETA BANNER ░░ -->
+<div class="beta-banner">
+  <marquee scrollamount="4"><span data-i18n="beta_banner">🚧 Beta — Report bugs using the feedback button</span></marquee>
+</div>
 
-  <!-- Feedback Modal -->
-  <div id="feedbackModal" class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-20 hidden">
-    <div class="bg-gray-800 border border-gray-700 rounded-2xl shadow-2xl p-8 max-w-md w-full relative">
-      <button id="closeModal" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
-      <h2 class="text-2xl font-bold mb-4">Feedback / Bug Report</h2>
-      <form id="feedbackForm" class="space-y-4">
-        <input type="text" name="contact" placeholder="Your Contact (Email or Phone)" required class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-        <textarea name="message" placeholder="Describe your issue or suggestion..." required rows="4" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-all">Submit</button>
-      </form>
+<!-- ░░ MAIN ░░ -->
+<main class="main-container">
+
+  <!-- ══ TAB NAV ══ -->
+  <div class="tab-nav">
+    <button class="tab-btn active" data-tab="photo">📷 <span data-i18n="upload_title">Upload Photos</span></button>
+    <button class="tab-btn" data-tab="linkedin">💼 <span data-i18n="linkedin_title">LinkedIn Frame</span></button>
+  </div>
+
+  <!-- ══ TAB: PHOTO ══ -->
+  <div id="tab-photo" class="tab-panel card">
+
+    <h2 class="section-title" data-i18n="upload_title">Upload Photos</h2>
+    <p class="section-hint" data-i18n="upload_hint">Drag & Drop or click to upload • JPG, PNG, WEBP</p>
+
+    <!-- Drop Zone -->
+    <div id="dropZone" class="drop-zone">
+      <input type="file" id="imageInput" class="hidden" accept="image/*" multiple/>
+      <div class="drop-zone-inner">
+        <div class="drop-icon">🖼️</div>
+        <p class="drop-title" data-i18n="upload_hint">Drag & Drop or click to upload</p>
+        <p class="drop-sub">JPG · PNG · WEBP · Max 16 MB</p>
+      </div>
+    </div>
+
+    <!-- Photo List -->
+    <div id="photoList" class="photo-list"></div>
+
+    <!-- Add More -->
+    <div id="addMoreWrapper" class="hidden text-center mt-2">
+      <button id="addMoreBtn" class="btn-secondary" data-i18n="add_more">+ Add More Photos</button>
+    </div>
+
+    <!-- Background Colour -->
+    <div class="section-block">
+      <label class="block-label" data-i18n="bg_colour">Background Colour</label>
+      <div class="colour-grid" id="colourGrid">
+        <button class="colour-swatch active" data-colour="white"    style="background:#fff"    title="White"></button>
+        <button class="colour-swatch"        data-colour="original" style="background:transparent;border:2px dashed #888" title="Original"></button>
+        <button class="colour-swatch"        data-colour="red"      style="background:#dc2626" title="Red"></button>
+        <button class="colour-swatch"        data-colour="blue"     style="background:#2563eb" title="Blue"></button>
+        <button class="colour-swatch"        data-colour="yellow"   style="background:#eab308" title="Yellow"></button>
+        <button class="colour-swatch"        data-colour="green"    style="background:#16a34a" title="Green"></button>
+        <button class="colour-swatch"        data-colour="orange"   style="background:#ea580c" title="Orange"></button>
+        <button class="colour-swatch"        data-colour="pink"     style="background:#ec4899" title="Pink"></button>
+        <button class="colour-swatch"        data-colour="darkviolet" style="background:#6d28d9" title="Dark Violet"></button>
+        <button class="colour-swatch"        data-colour="black"    style="background:#000"    title="Black"></button>
+        <!-- Custom colour wheel -->
+        <label class="colour-swatch colour-wheel-btn" title="Custom colour">
+          🎨
+          <input type="color" id="customColour" value="#3b82f6" style="opacity:0;position:absolute;width:0;height:0"/>
+        </label>
+      </div>
+      <!-- Live background preview box -->
+      <div id="bgPreview" class="bg-preview" style="background:#fff">
+        <span class="bg-preview-face">🙂</span>
+      </div>
+    </div>
+
+    <!-- Advanced Options -->
+    <div class="section-block">
+      <button id="toggleAdvanced" class="btn-link" data-i18n="advanced_options">Advanced Options ▾</button>
+      <div id="advancedOptions" class="advanced-grid hidden">
+        <div class="input-group">
+          <label data-i18n="width">Width (px)</label>
+          <input type="number" id="photoWidth" value="390" min="100" max="2000"/>
+        </div>
+        <div class="input-group">
+          <label data-i18n="height">Height (px)</label>
+          <input type="number" id="photoHeight" value="480" min="100" max="2000"/>
+        </div>
+        <div class="input-group">
+          <label data-i18n="spacing">Spacing (px)</label>
+          <input type="number" id="photoSpacing" value="10" min="0" max="100"/>
+        </div>
+        <div class="input-group">
+          <label data-i18n="border">Border (px)</label>
+          <input type="number" id="photoBorder" value="2" min="0" max="50"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-row">
+      <button id="generateBtn" class="btn-primary" data-i18n="generate">Generate Sheet</button>
+      <button id="downloadPngBtn" class="btn-secondary hidden" data-i18n="download_png">Download PNG</button>
+      <button id="downloadBtn" class="btn-success hidden" data-i18n="download_pdf">Download PDF</button>
+    </div>
+    <div id="loading" class="loading-bar hidden">
+      <div class="loading-pulse"></div>
+      <span data-i18n="processing">Processing images… please wait</span>
+    </div>
+
+    <!-- PDF Preview -->
+    <embed id="pdfPreview" type="application/pdf" class="pdf-preview hidden"/>
+  </div>
+
+  <!-- ══ TAB: LINKEDIN FRAME ══ -->
+  <div id="tab-linkedin" class="tab-panel card hidden">
+    <h1 class="section-title" data-i18n="li_title">💼 LinkedIn Profile Frame Generator</h1>
+    <p class="section-hint" data-i18n="li_hint">Customize your LinkedIn profile picture with a banner or frame in just a few clicks.</p>
+
+    <div class="li-layout">
+      <!-- LEFT: Canvas Preview -->
+      <div class="canvas-wrap">
+        <canvas id="liCanvas" width="600" height="600" title="Click to upload photo"></canvas>
+        <p style="font-size:0.75rem;color:var(--text-muted)" data-i18n="li_click_hint">Click canvas or use the uploader →</p>
+        <button id="downloadBtn" class="btn-primary" style="width:100%" data-i18n="li_download">⬇️ Download Image</button>
+      </div>
+
+      <!-- RIGHT: Controls -->
+      <div>
+        <!-- Upload -->
+        <div class="section-block" style="margin-top:0">
+          <label class="block-label" data-i18n="li_upload_title">📁 Upload Photo</label>
+          <div class="li-drop-zone" id="liDropZone">
+            <input type="file" id="liFileInput" accept="image/*"/>
+            <div class="drop-icon">🖼️</div>
+            <p style="font-size:0.85rem;font-weight:600;" data-i18n="upload_hint">Drag & Drop or click to upload</p>
+          </div>
+          <button id="liRemoveBgBtn" class="btn-secondary" style="width:100%; margin-top:0.5rem" data-i18n="li_remove_bg">✨ Remove Background (AI)</button>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <!-- Banner Color -->
+          <div class="section-block">
+            <label class="block-label" data-i18n="li_banner_color">🎨 Banner Color (Hex)</label>
+            <div class="swatch-row" id="ringSwatches">
+              <div class="li-swatch active" data-color="#4b9429" style="background:#4b9429" title="Green"></div>
+              <div class="li-swatch" data-color="#0077B5" style="background:#0077B5" title="LinkedIn Blue"></div>
+              <div class="li-swatch" data-color="#f59e0b" style="background:#f59e0b" title="Gold"></div>
+              <label class="li-swatch" style="display:flex;align-items:center;justify-content:center;background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);cursor:pointer;" title="Custom">
+                <input type="color" id="ringColorPicker" value="#4b9429" style="opacity:0;position:absolute;width:0;height:0"/>
+              </label>
+            </div>
+            <input type="text" id="ringColorHex" class="form-input" style="margin-top:0.5rem" value="#4b9429" readonly/>
+          </div>
+
+          <!-- Text Color -->
+          <div class="section-block">
+            <label class="block-label" data-i18n="li_text_color">🖊️ Text Color (Hex)</label>
+            <div class="swatch-row" id="arcTextSwatches">
+              <div class="li-swatch active" data-color="#ffffff" style="background:#fff;border:1px solid #555" title="White"></div>
+              <div class="li-swatch" data-color="#000000" style="background:#000" title="Black"></div>
+              <label class="li-swatch" style="display:flex;align-items:center;justify-content:center;background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);cursor:pointer;" title="Custom">
+                <input type="color" id="arcTextColorPicker" value="#ffffff" style="opacity:0;position:absolute;width:0;height:0"/>
+              </label>
+            </div>
+            <input type="text" id="arcTextHex" class="form-input" style="margin-top:0.5rem" value="#FFFFFF" readonly/>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <!-- BG Color (behind person) -->
+          <div class="section-block">
+            <label class="block-label" data-i18n="li_bg_pattern">🖼️ Background Pattern</label>
+            <div class="swatch-row" id="bgSwatches">
+              <div class="li-swatch active" data-color="transparent" style="background:repeating-conic-gradient(#eee 0% 25%, transparent 0% 50%) 50% / 10px 10px" title="Transparent"></div>
+              <div class="li-swatch" data-color="#ffffff" style="background:#fff;border:1px solid #555" title="White"></div>
+              <div class="li-swatch" data-color="#e2e8f0" style="background:#e2e8f0" title="Light Slate"></div>
+              <label class="li-swatch" style="display:flex;align-items:center;justify-content:center;background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);cursor:pointer;" title="Custom">
+                <input type="color" id="bgColorPicker" value="#ffffff" style="opacity:0;position:absolute;width:0;height:0"/>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Arc Text -->
+        <div class="section-block">
+          <label class="block-label" data-i18n="li_banner_text">✍️ Banner Text</label>
+          <input type="text" id="arcText" class="form-input" data-i18n-placeholder="li_banner_text_placeholder" placeholder="#CashNee" value="#CashNee" style="margin-bottom:0.5rem;text-align:center;font-weight:700"/>
+        </div>
+
+        <!-- Crop tools -->
+        <div class="section-block">
+          <label class="block-label" data-i18n="li_adjust_photo">✂️ Adjust Photo</label>
+          <div class="crop-toolbar">
+            <button class="crop-tool-btn" id="cropOpen"><span data-i18n="crop">✂️ Open Crop</span></button>
+            <button class="crop-tool-btn" id="rotateCWBtn">🔄 CW</button>
+            <button class="crop-tool-btn" id="flipHBtn">↔️ Flip H</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Notification -->
-  <div id="notification" class="fixed bottom-1/2 right-5 text-white py-2 px-4 rounded-lg shadow-lg transform translate-x-[120%] transition-transform duration-500 z-50">
-    <p id="notification-message"></p>
+</main>
+
+<!-- ░░ CROP MODAL ░░ -->
+<div id="cropperModal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <h3 class="modal-title" data-i18n="crop">Crop Photo</h3>
+    <!-- Crop Toolbar -->
+    <div class="crop-toolbar">
+      <button class="crop-tool-btn" id="rotateCW" title="Rotate Clockwise">🔄 <span data-i18n="rotate_cw">CW</span></button>
+      <button class="crop-tool-btn" id="rotateCCW" title="Rotate Anti-Clockwise">↩ <span data-i18n="rotate_ccw">CCW</span></button>
+      <button class="crop-tool-btn" id="flipH" title="Flip Horizontal">↔️ <span data-i18n="flip_h">Flip H</span></button>
+      <button class="crop-tool-btn" id="flipV" title="Flip Vertical">↕️ <span data-i18n="flip_v">Flip V</span></button>
+    </div>
+    <div class="crop-container">
+      <img id="cropModalImage" src="" alt="crop"/>
+    </div>
+    <div class="modal-actions">
+      <button id="cancelCropBtn" class="btn-secondary" data-i18n="remove">Cancel</button>
+      <button id="confirmCropBtn" class="btn-primary" data-i18n="crop">Crop & Save</button>
+    </div>
   </div>
+</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-  <script>
-    emailjs.init("XJqjmVHK4ISEX0Zam");
+<!-- ░░ FEEDBACK BUTTON + MODAL ░░ -->
+<button id="feedbackBtn" class="fab-btn" title="Feedback"><span data-i18n="feedback">💬</span></button>
+<div id="feedbackModal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <button id="closeModal" class="modal-close">✕</button>
+    <h2 class="modal-title" data-i18n="feedback_title">Feedback / Bug Report</h2>
+    <form id="feedbackForm" class="feedback-form">
+      <input type="text" name="contact" class="form-input" data-i18n-placeholder="feedback_contact" placeholder="Your Contact (Email or Phone)" required/>
+      <textarea name="message" class="form-input" rows="4" data-i18n-placeholder="feedback_message" placeholder="Describe your issue or suggestion…" required></textarea>
+      <button type="submit" class="btn-primary w-full" data-i18n="feedback_submit">Submit</button>
+    </form>
+  </div>
+</div>
 
-    particlesJS('particles-js', {
-      particles: {
-        number: { value: 80, density: { enable: true, value_area: 800 } },
-        color: { value: "#4a5568" }, shape: { type: "circle" },
-        opacity: { value: 0.5, random: true }, size: { value: 3, random: true },
-        line_linked: { enable: true, distance: 150, color: "#718096", opacity: 0.4, width: 1 },
-        move: { enable: true, speed: 2, direction: "none", random: false, straight: false, out_mode: "out" }
-      },
-      interactivity: {
-        detect_on: "canvas",
-        events: { onhover: { enable: true, mode: "repulse" }, onclick: { enable: true, mode: "push" } },
-        modes: { repulse: { distance: 100 }, push: { particles_nb: 4 } }
-      },
-      retina_detect: true
-    });
+<!-- ░░ TOAST NOTIFICATION ░░ -->
+<div id="toast" class="toast hidden">
+  <span id="toastMsg"></span>
+</div>
 
-    // ---- State ----
-    // photos: Array of { id, originalFile, croppedFile, previewUrl, copies }
-    let photos = [];
-    let nextId = 0;
-
-    // Cropper modal state
-    let activeCropper = null;
-    let pendingCropId = null;
-
-    // DOM refs
-    const dropZone = document.getElementById('dropZone');
-    const imageInput = document.getElementById('imageInput');
-    const photoList = document.getElementById('photoList');
-    const addMoreWrapper = document.getElementById('addMoreWrapper');
-    const addMoreBtn = document.getElementById('addMoreBtn');
-    const generateBtn = document.getElementById('generateBtn');
-    const downloadBtn = document.getElementById('downloadBtn');
-    const pdfPreview = document.getElementById('pdfPreview');
-    const loading = document.getElementById('loading');
-    const toggleAdvanced = document.getElementById('toggleAdvanced');
-    const advancedOptions = document.getElementById('advancedOptions');
-    const cropperModal = document.getElementById('cropperModal');
-    const cropModalImage = document.getElementById('cropModalImage');
-    const confirmCropBtn = document.getElementById('confirmCropBtn');
-    const cancelCropBtn = document.getElementById('cancelCropBtn');
-    const notification = document.getElementById('notification');
-    const notifMsg = document.getElementById('notification-message');
-    const feedbackBtn = document.getElementById('feedbackBtn');
-    const feedbackModal = document.getElementById('feedbackModal');
-    const closeModal = document.getElementById('closeModal');
-    const feedbackForm = document.getElementById('feedbackForm');
-
-    // ---- Notifications ----
-    function showNotification(msg, isError = true) {
-      notifMsg.textContent = msg;
-      notification.classList.remove('bg-red-500', 'bg-green-500');
-      notification.classList.add(isError ? 'bg-red-500' : 'bg-green-500');
-      notification.classList.remove('translate-x-[120%]');
-      notification.classList.add('translate-x-0');
-      setTimeout(() => {
-        notification.classList.remove('translate-x-0');
-        notification.classList.add('translate-x-[120%]');
-      }, 3000);
-    }
-
-    // ---- Render Photo Cards ----
-    function renderPhotoList() {
-      photoList.innerHTML = '';
-      photos.forEach(photo => {
-        const card = document.createElement('div');
-        card.className = 'photo-card flex items-center gap-4 bg-gray-900/60 border border-gray-700 rounded-xl p-4';
-        card.innerHTML = `
-          <img src="${photo.previewUrl}" class="w-16 h-20 object-cover rounded-lg border border-gray-600 flex-shrink-0" />
-          <div class="flex-1 min-w-0">
-            <p class="text-sm font-medium text-gray-200 truncate">${photo.originalFile.name}</p>
-            <p class="text-xs text-gray-500 mt-0.5">${photo.croppedFile ? '✅ Cropped' : '⚠️ Not cropped'}</p>
-          </div>
-          <div class="flex flex-col items-center gap-1">
-            <label class="text-xs text-gray-400">Copies</label>
-            <input type="number" value="${photo.copies}" min="1" max="54"
-              class="bg-gray-700 border border-gray-600 rounded-lg w-16 p-1.5 text-center text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              data-id="${photo.id}" />
-          </div>
-          <div class="flex flex-col gap-2">
-            <button class="crop-btn text-xs bg-blue-500/20 hover:bg-blue-500/40 text-blue-300 border border-blue-500/30 px-3 py-1.5 rounded-lg transition-all" data-id="${photo.id}">Crop</button>
-            <button class="remove-btn text-xs bg-red-500/20 hover:bg-red-500/40 text-red-400 border border-red-500/30 px-3 py-1.5 rounded-lg transition-all" data-id="${photo.id}">Remove</button>
-          </div>
-        `;
-        photoList.appendChild(card);
-      });
-
-      // Bind copies inputs
-      photoList.querySelectorAll('input[type=number]').forEach(input => {
-        input.addEventListener('change', e => {
-          const id = parseInt(e.target.dataset.id);
-          const photo = photos.find(p => p.id === id);
-          if (photo) photo.copies = Math.max(1, parseInt(e.target.value) || 1);
-        });
-      });
-
-      // Bind crop buttons
-      photoList.querySelectorAll('.crop-btn').forEach(btn => {
-        btn.addEventListener('click', e => {
-          const id = parseInt(e.target.dataset.id);
-          openCropper(id);
-        });
-      });
-
-      // Bind remove buttons
-      photoList.querySelectorAll('.remove-btn').forEach(btn => {
-        btn.addEventListener('click', e => {
-          const id = parseInt(e.target.dataset.id);
-          photos = photos.filter(p => p.id !== id);
-          renderPhotoList();
-          if (photos.length === 0) addMoreWrapper.classList.add('hidden');
-        });
-      });
-
-      addMoreWrapper.classList.toggle('hidden', photos.length === 0);
-    }
-
-    // ---- Add Files ----
-    function addFiles(files) {
-      const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-      let added = 0;
-      Array.from(files).forEach(file => {
-        if (!validTypes.includes(file.type)) return;
-        const photo = {
-          id: nextId++,
-          originalFile: file,
-          croppedFile: null,
-          previewUrl: URL.createObjectURL(file),
-          copies: 6
-        };
-        photos.push(photo);
-        added++;
-      });
-      if (added === 0) showNotification("Please upload valid image files (JPG, PNG, WEBP).");
-      renderPhotoList();
-    }
-
-    // ---- Drop Zone ----
-    dropZone.addEventListener('click', () => imageInput.click());
-    dropZone.addEventListener('dragover', e => {
-      e.preventDefault();
-      dropZone.classList.add('border-blue-400', 'bg-gray-700/50');
-    });
-    dropZone.addEventListener('dragleave', () => {
-      dropZone.classList.remove('border-blue-400', 'bg-gray-700/50');
-    });
-    dropZone.addEventListener('drop', e => {
-      e.preventDefault();
-      dropZone.classList.remove('border-blue-400', 'bg-gray-700/50');
-      addFiles(e.dataTransfer.files);
-    });
-    imageInput.addEventListener('change', () => {
-      addFiles(imageInput.files);
-      imageInput.value = '';
-    });
-    addMoreBtn.addEventListener('click', () => imageInput.click());
-
-    // ---- Cropper Modal ----
-    function openCropper(id) {
-      const photo = photos.find(p => p.id === id);
-      if (!photo) return;
-      pendingCropId = id;
-      cropModalImage.src = photo.previewUrl;
-      cropperModal.classList.remove('hidden');
-      if (activeCropper) activeCropper.destroy();
-      activeCropper = new Cropper(cropModalImage, {
-        aspectRatio: 384 / 472,
-        viewMode: 1,
-        dragMode: 'move',
-        autoCropArea: 1,
-      });
-    }
-
-    confirmCropBtn.addEventListener('click', () => {
-      if (!activeCropper || pendingCropId === null) return;
-      const canvas = activeCropper.getCroppedCanvas({ width: 400, height: 480 });
-      canvas.toBlob(blob => {
-        const photo = photos.find(p => p.id === pendingCropId);
-        if (!photo) return;
-        photo.croppedFile = new File([blob], 'cropped-' + photo.originalFile.name, { type: 'image/png' });
-        photo.previewUrl = URL.createObjectURL(blob);
-        activeCropper.destroy();
-        activeCropper = null;
-        pendingCropId = null;
-        cropperModal.classList.add('hidden');
-        renderPhotoList();
-        showNotification("Photo cropped successfully.", false);
-      }, 'image/png');
-    });
-
-    cancelCropBtn.addEventListener('click', () => {
-      if (activeCropper) { activeCropper.destroy(); activeCropper = null; }
-      pendingCropId = null;
-      cropperModal.classList.add('hidden');
-    });
-
-    // ---- Advanced Options ----
-    toggleAdvanced.addEventListener('click', () => {
-      const visible = advancedOptions.style.display === 'block';
-      advancedOptions.style.display = visible ? 'none' : 'block';
-      toggleAdvanced.textContent = visible ? 'Advanced Options' : 'Hide Advanced Options';
-    });
-
-    // ---- Generate PDF ----
-    generateBtn.addEventListener('click', () => {
-      if (photos.length === 0) {
-        showNotification("Please upload at least one photo.");
-        return;
-      }
-
-      const formData = new FormData();
-      photos.forEach((photo, i) => {
-        // Use cropped file if available, else original
-        formData.append(`image_${i}`, photo.croppedFile || photo.originalFile);
-        formData.append(`copies_${i}`, photo.copies);
-      });
-      formData.append('width', document.getElementById('width').value);
-      formData.append('height', document.getElementById('height').value);
-      formData.append('spacing', document.getElementById('spacing').value);
-      formData.append('border', document.getElementById('border').value);
-
-      loading.classList.remove('hidden');
-      generateBtn.disabled = true;
-      downloadBtn.classList.add('hidden');
-      pdfPreview.classList.add('hidden');
-
-      fetch('/process', { method: 'POST', body: formData })
-        .then(async response => {
-          if (response.status === 429) { showNotification("Server Daily Quota Exceeded. Please try again later."); return null; }
-          if (response.status === 410) { showNotification("Cannot Detect Face/Background in one of the images."); return null; }
-          if (response.status === 500) { showNotification("Internal Error, try again later."); return null; }
-          if (!response.ok) throw new Error("Processing failed.");
-          return response.blob();
-        })
-        .then(blob => {
-          if (!blob) return;
-          const url = URL.createObjectURL(blob);
-          pdfPreview.classList.remove('hidden');
-          pdfPreview.src = url;
-          downloadBtn.classList.remove('hidden');
-          downloadBtn.onclick = () => {
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = 'passport-sheet.pdf';
-            link.click();
-          };
-          showNotification("PDF generated successfully!", false);
-        })
-        .catch(err => {
-          console.error(err);
-          showNotification("Image processing failed. Try again later.");
-        })
-        .finally(() => {
-          loading.classList.add('hidden');
-          generateBtn.disabled = false;
-        });
-    });
-
-    // ---- Feedback ----
-    feedbackBtn.addEventListener('click', () => feedbackModal.classList.remove('hidden'));
-    closeModal.addEventListener('click', () => feedbackModal.classList.add('hidden'));
-    feedbackForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const contact = feedbackForm.contact.value.trim();
-      const message = feedbackForm.message.value.trim();
-      if (!contact || !message) { showNotification("Please fill out all fields."); return; }
-      const btn = feedbackForm.querySelector('button[type="submit"]');
-      btn.disabled = true; btn.textContent = 'Submitting...';
-      emailjs.send("service_aoewzsq", "template_hbw13lt", {
-        contact, message,
-        user_agent: navigator.userAgent,
-        time: new Date().toLocaleString()
-      }).then(() => {
-        showNotification("Feedback submitted. Thank you!", false);
-        feedbackModal.classList.add('hidden');
-        feedbackForm.reset();
-      }).catch(err => {
-        console.error(err);
-        showNotification("Failed to send feedback. Please try again.");
-      }).finally(() => {
-        btn.disabled = false; btn.textContent = 'Submit';
-      });
-    });
-  </script>
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+<script src="/static/app.js"></script>
 </body>
 </html>
